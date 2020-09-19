@@ -40,12 +40,10 @@ export class Universe {
                 const state = this.matrix[row][col]
                 const neighbors = this.neighbors({ x: col, y: row })
 
-                if( state == false && neighbors == 3 ){
-                    delta.push({ x: col, y: row, state: true })
-                }else if( state == true && (neighbors == 2 || neighbors == 3) ){
-                    delta.push({ x: col, y: row, state: true })
-                }else if( state == true ){
+                if( state == true && neighbors != 2 && neighbors != 3 ){
                     delta.push({ x: col, y: row, state: false })
+                }else if( state == false && neighbors == 3 ){
+                    delta.push({ x: col, y: row, state: true })
                 }
             }
         }
