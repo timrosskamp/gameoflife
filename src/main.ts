@@ -9,7 +9,7 @@ domReady(() => {
 
     const game = new GameOfLife(canvas)
 
-    play.addEventListener('click', e => {
+    play.addEventListener('click', () => {
         if( game.paused ){
             play.classList.add('active')
             game.play()
@@ -19,11 +19,7 @@ domReady(() => {
         }
     })
 
-    iterate.addEventListener('click', e => {
-        game.iterate()
-    })
+    iterate.addEventListener('click', () => game.iterate())
 
-    clear.addEventListener('click', e => {
-        game.clear()
-    })
+    clear.addEventListener('click', () => game.clear())
 })

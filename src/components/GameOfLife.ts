@@ -1,5 +1,5 @@
 import { fromEvent, Observable, merge } from 'rxjs'
-import { concatMap, takeUntil, map, mergeMap } from 'rxjs/operators'
+import { takeUntil, map, mergeMap } from 'rxjs/operators'
 import { Universe } from './Universe'
 
 const CELLSIZE = 20

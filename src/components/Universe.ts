@@ -73,7 +73,7 @@ export class Universe {
         for( let x = -1; x <= 1; x++ ){
             for( let y = -1; y <= 1; y++ ){
                 if( x == 0 && y == 0 )
-                    continue;
+                    continue
 
                 if( this.matrix[this.torus(point.y + y)][this.torus(point.x + x)] )
                     cells++
