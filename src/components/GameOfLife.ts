@@ -1,5 +1,4 @@
-import { fromEvent, Observable, merge } from 'rxjs'
-import { takeUntil, map, mergeMap } from 'rxjs/operators'
+import { Dragging } from './Dagging'
 import { Universe } from './Universe'
 
 const CELLSIZE = 20
@@ -22,30 +21,11 @@ export class GameOfLife {
 
         this.universe = new Universe(MAPSIZE)
 
-        const mapPoint = e => ({
-            x: e.offsetX,
-            y: e.offsetY
-        })
+        const dragging = new Dragging(this.canvas)
 
-        const mousedown$ = fromEvent(this.canvas, 'mousedown') as Observable<MouseEvent>
-        const mousemove$ = fromEvent(this.canvas, 'mousemove') as Observable<MouseEvent>
-        const mouseup$ = fromEvent(window, 'mouseup') as Observable<MouseEvent>
-
-        const paint$ = merge(
-            mousedown$.pipe(
-                map(mapPoint)
-            ),
-            mousedown$.pipe(
-                mergeMap(() => mousemove$.pipe(
-                    takeUntil(mouseup$)
-                )),
-                map(mapPoint)
-            )
-        )
-
-        paint$.subscribe(e => {
-            const x = Math.ceil((e.x - CELLSIZE) / CELLSIZE)
-            const y = Math.ceil((e.y - CELLSIZE) / CELLSIZE)
+        dragging.on((e: MouseEvent) => {
+            const x = Math.ceil((e.offsetX - CELLSIZE) / CELLSIZE)
+            const y = Math.ceil((e.offsetY - CELLSIZE) / CELLSIZE)
 
             this.universe.enliveCell({ x, y })
         })
