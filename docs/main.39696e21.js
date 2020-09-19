@@ -409,4 +409,4 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
 },{}],"ZCfc":[function(require,module,exports) {
 "use strict";Object.defineProperty(exports,"__esModule",{value:!0});var e=require("./components/GameOfLife"),t=require("./utils/domReady");t.domReady(function(){var t=document.getElementById("gameoflife"),n=document.getElementById("play"),a=document.getElementById("iterate"),i=document.getElementById("clear"),c=new e.GameOfLife(t);n.addEventListener("click",function(e){c.paused?(n.classList.add("active"),c.play()):(n.classList.remove("active"),c.pause())}),a.addEventListener("click",function(e){c.iterate()}),i.addEventListener("click",function(e){c.clear()})});
 },{"./components/GameOfLife":"j1v3","./utils/domReady":"AvCk"}]},{},["ZCfc"], null)
-//# sourceMappingURL=/main.39696e21.js.map
+//# sourceMappingURL=https://timrosskamp.github.io/gameoflife/main.39696e21.js.map
