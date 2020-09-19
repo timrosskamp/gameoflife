@@ -3,6 +3,12 @@ interface Point {
     y: number
 }
 
+interface Delta {
+    x: number
+    y: number
+    state: boolean
+}
+
 export class Universe {
 
     private size: number
@@ -33,7 +39,7 @@ export class Universe {
     }
 
     iterate(){
-        const delta = []
+        const delta: Delta[] = []
 
         for( let row = 0; row < this.size; row++ ){
             for( let col = 0; col < this.size; col++ ){
@@ -48,9 +54,9 @@ export class Universe {
             }
         }
 
-        delta.forEach(point => {
-            this.matrix[point.y][point.x] = point.state
-        })
+        for( const { x, y, state } of delta ){
+            this.matrix[y][x] = state
+        }
     }
 
     clear() {
