@@ -1,8 +1,6 @@
+import { CanvasResizer } from './CanvasResizer'
 import { Dragging } from './Dagging'
 import { Universe } from './Universe'
-
-const CELLSIZE = 20
-const MAPSIZE = 30
 
 export class GameOfLife {
 
@@ -12,20 +10,35 @@ export class GameOfLife {
     paused = true
     lastIteration = Date.now()
 
+    cellsize = 20
+
     constructor(canvas: HTMLCanvasElement){
         this.canvas = canvas
         this.ctx = canvas.getContext('2d')
 
-        this.canvas.width = CELLSIZE * MAPSIZE
-        this.canvas.height = CELLSIZE * MAPSIZE
+        const resizer = new CanvasResizer(canvas)
 
-        this.universe = new Universe(MAPSIZE)
+        this.universe = new Universe(
+            Math.ceil(resizer.height / this.cellsize),
+            Math.ceil(resizer.width / this.cellsize)
+        )
+
+        resizer.on(() => {
+            this.universe.resize(
+                Math.ceil(resizer.height / this.cellsize),
+                Math.ceil(resizer.width / this.cellsize)
+            )
+        })
 
         const dragging = new Dragging(this.canvas)
 
         dragging.on((e: MouseEvent) => {
-            const x = Math.ceil((e.offsetX - CELLSIZE) / CELLSIZE)
-            const y = Math.ceil((e.offsetY - CELLSIZE) / CELLSIZE)
+            const x = Math.ceil((e.offsetX - this.cellsize) / this.cellsize)
+            const y = Math.ceil((e.offsetY - this.cellsize) / this.cellsize)
+
+            if( x < 0 || y < 0 ){
+                return;
+            }
 
             this.universe.enliveCell({ x, y })
         })
@@ -60,10 +73,10 @@ export class GameOfLife {
 
         this.universe.getLivingCells().forEach(point => {
             this.ctx.fillRect(
-                point.x * CELLSIZE + 2,
-                point.y * CELLSIZE + 2,
-                CELLSIZE - 4,
-                CELLSIZE - 4
+                point.x * this.cellsize + 2,
+                point.y * this.cellsize + 2,
+                this.cellsize - 4,
+                this.cellsize - 4
             )
         })
 

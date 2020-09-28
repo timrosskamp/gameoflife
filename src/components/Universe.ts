@@ -11,11 +11,13 @@ interface Delta {
 
 export class Universe {
 
-    private size: number
+    private rows: number
+    private cols: number
     private matrix: Array<Array<boolean>>
 
-    constructor(size: number){
-        this.size = size
+    constructor(rows: number, cols: number){
+        this.rows = rows
+        this.cols = cols
 
         this.clear()
     }
@@ -23,8 +25,8 @@ export class Universe {
     getLivingCells(){
         const cells: Point[] = []
 
-        for( let row = 0; row < this.size; row++ ){
-            for( let col = 0; col < this.size; col++ ){
+        for( let row = 0; row < this.rows; row++ ){
+            for( let col = 0; col < this.cols; col++ ){
                 if( this.matrix[row][col] == true ){
                     cells.push({ x: col, y: row })
                 }
@@ -41,8 +43,8 @@ export class Universe {
     iterate(){
         const delta: Delta[] = []
 
-        for( let row = 0; row < this.size; row++ ){
-            for( let col = 0; col < this.size; col++ ){
+        for( let row = 0; row < this.rows; row++ ){
+            for( let col = 0; col < this.cols; col++ ){
                 const state = this.matrix[row][col]
                 const neighbors = this.neighbors({ x: col, y: row })
 
@@ -62,13 +64,48 @@ export class Universe {
     clear() {
         this.matrix = []
 
-        for( let row = 0; row < this.size; row++ ){
+        for( let row = 0; row < this.rows; row++ ){
             this.matrix[row] = []
 
-            for( let col = 0; col < this.size; col++ ){
+            for( let col = 0; col < this.cols; col++ ){
                 this.matrix[row][col] = false
             }
         }
+    }
+
+    resize(rows: number, cols: number){
+        if( rows !== this.rows ){
+            if( rows > this.rows ){
+                for( let row = this.rows; row < rows; row++ ){
+                    this.matrix[row] = [];
+
+                    for( let col = 0; col < this.cols; col++ ){
+                        this.matrix[row][col] = false
+                    }
+                }
+            }else{
+                this.matrix = this.matrix.slice(0, rows)
+            }
+
+            this.rows = rows
+        }
+
+        if( cols !== this.cols ){
+            if( cols > this.cols ){
+                for( let row = 0; row < this.rows; row++ ){
+                    for( let col = this.cols; col < cols; col++ ){
+                        this.matrix[row][col] = false
+                    }
+                }
+            }else{
+                for( let row = 0; row < this.rows; row++ ){
+                    this.matrix[row] = this.matrix[row].slice(0, cols)
+                }
+            }
+
+            this.cols = cols
+        }
+
     }
 
     private neighbors(point: Point){
@@ -79,7 +116,7 @@ export class Universe {
                 if( x == 0 && y == 0 )
                     continue
 
-                if( this.matrix[this.torus(point.y + y)][this.torus(point.x + x)] )
+                if( this.matrix[this.torus(point.y + y, this.rows)][this.torus(point.x + x, this.cols)] )
                     cells++
             }
         }
@@ -87,8 +124,8 @@ export class Universe {
         return cells
     }
 
-    private torus(i: number){
-        return (i + this.size) % this.size
+    private torus(i: number, limit: number){
+        return (i + limit) % limit
     }
 
 }
