@@ -20,6 +20,10 @@ export class Dragging {
                 this.emit(e)
             }
         })
+
+        target.addEventListener('contextmenu', e => {
+            e.preventDefault()
+        })
     }
 
     private emit(e: Event){

@@ -40,6 +40,10 @@ export class Universe {
         this.matrix[point.y][point.x] = true
     }
 
+    unliveCell(point: Point){
+        this.matrix[point.y][point.x] = false
+    }
+
     iterate(){
         const delta: Delta[] = []
 
